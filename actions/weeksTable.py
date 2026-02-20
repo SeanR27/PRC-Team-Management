@@ -3,7 +3,8 @@ import os
 
 from .. import config
 from .. import fileManagement as fm
-from .. import weeklyGames as wg
+import weeklyGames as wg
+import weeklyStats as ws
 
 rootPath = config.mainPath()
 dataPath = config.dataPath()
@@ -28,18 +29,18 @@ def getColumnDict():
     # KeyName : [index, columnLabel]
     return {"weekID": [0, "WEEK_ID"],
             "OppID": [1, "OPP_TEAM_ID"],
-            "date": [2, "DATE"]
+            "homeAway": [2, "H_A"],
+            "date": [3, "DATE"]
             }
 
 def clearTable(df):
 
     return df.drop(df.index, inplace = False)
 
-def addWeek(df, teamID, date):
+def addWeek(df, teamID, ha_bin, date):
     colDict_weeks = getColumnDict()
-    colDict_weekly = wg.getColumnDict()
 
-    maxID = -1
+    maxID = 0
     if not df.empty:
         maxID = int(df[colDict_weeks["weekID"][1]].max()[1:])
 
@@ -50,9 +51,11 @@ def addWeek(df, teamID, date):
     df.reset_index()
     df.loc[rows, colDict_weeks["weekID"][1]] = weekID
     df.loc[rows, colDict_weeks["OppID"][1]] = teamID
+    df.loc[rows, colDict_weeks["homeAway"][1]] = ha_bin
     df.loc[rows, colDict_weeks["date"][1]] = str(date)
 
     wg.createWeek(weekID)
+    ws.createWeek(weekID)
 
     return df
 

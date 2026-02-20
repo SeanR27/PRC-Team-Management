@@ -12,7 +12,7 @@ weekStats_dataPath = config.weekStatsPath()
 thisPath = os.path.dirname(__file__)
 
 def main():
-    createWeek("W0000")
+    None
 
 def getColumnDict():
     """
@@ -43,7 +43,5 @@ def createWeek(weekID):
     
     os.makedirs(pathBase, exist_ok = True)
     fm.export(newDF, pathBase + weekStatsID + ".csv", pathBase + weekStatsID + ".pkl")
-
-    
 
 main()
