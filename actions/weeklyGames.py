@@ -11,7 +11,7 @@ weeksGames_dataPath = config.weekGamesPath()
 thisPath = os.path.dirname(__file__)
 
 def main():
-    print(dataPath + "data.csv")
+    None
 
 
 def getColumnDict():
@@ -34,9 +34,10 @@ def createWeek(weekID):
                                     colDict["pairStrength"][1],
                                     colDict["result"][1]])
     
-    pathBase = rootPath + "weeks/" + weekID + "/" + weekID
+    pathBase = weeksGames_dataPath + weekID + "/"
     
-    fm.export(newDF, pathBase + ".csv", pathBase + ".pkl")
+    os.makedirs(pathBase, exist_ok = True)
+    fm.export(newDF, pathBase + weekID + ".csv", pathBase + weekID + ".pkl")
 
     
 
