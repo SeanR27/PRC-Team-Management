@@ -1,23 +1,25 @@
 import pandas as pd
 import os
 
-os.chdir("C:/Users/seanr/Documents/5 - PRC Software")
+from .. import config
+from .. import fileManagement as fm
+
+rootPath = config.mainPath()
+dataPath = config.dataPath()
+thisPath = os.path.dirname(__file__)
 
 def main():
-    playerCSV_path = "players.csv"
-    playerPKL_path = "players.pkl"
+    playerCSV_path = dataPath + "players.csv"
+    playerPKL_path = dataPath + "players.pkl"
 
-    df = getDF(playerPKL_path)
+    df = fm.getDF_pkl(playerPKL_path)
     df = clearTable(df)
     df = addPlayer(df, "Agota", "Roth")
     print(df)
-    #export(df, "players.csv", "players.pkl")
+    df = removePlayer(df, "P0000")
+    print(df)
+    #export(df, playerCSV_path, playerPKL_path)
 
-
-# Ipmort & Export Functions
-def getDF(path): return pd.read_pickle(path)
-def getDF_csv(path): return pd.read_csv(path)
-def export(df, csv_exp_path, pkl_exp_path): df.to_csv(csv_exp_path, index = False); df.to_pickle(pkl_exp_path)
 
 def getColumnDict():
     # KeyName : [index, columnLabel]
@@ -48,13 +50,20 @@ def addPlayer(df, first, last):
     if not df.empty:
         maxID = int(df[colDict["playerID"][1]].max()[1:])
 
-    df.loc[rows, colDict["playerID"][1]] = "P" + str(maxID + 1).zfill(4)
-    df.loc[rows, colDict["firstName"][1]] = first
-    df.loc[rows, colDict["lastName"][1]] = last
+    df.iloc[rows, colDict["playerID"][0]] = "P" + str(maxID + 1).zfill(4)
+    df.iloc[rows, colDict["firstName"][0]] = first
+    df.iloc[rows, colDict["lastName"][0]] = last
 
     return df
 
+def removePlayer(df, playerID):
+    nrows = len(df)
 
+    for i in range(nrows):
+        if df.iloc[i, getColumnDict()["playerID"][0]] == playerID:
+            df.drop(df.iloc[i].name, inplace = True)
+    
+    return df
 
 
 
