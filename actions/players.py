@@ -6,11 +6,12 @@ from .. import fileManagement as fm
 
 rootPath = config.mainPath()
 dataPath = config.dataPath()
+players_dataPath = config.playerPath()
 thisPath = os.path.dirname(__file__)
 
 def main():
-    playerCSV_path = dataPath + "players.csv"
-    playerPKL_path = dataPath + "players.pkl"
+    playerCSV_path = players_dataPath + "players.csv"
+    playerPKL_path = players_dataPath + "players.pkl"
 
     df = fm.getDF_pkl(playerPKL_path)
     df = clearTable(df)

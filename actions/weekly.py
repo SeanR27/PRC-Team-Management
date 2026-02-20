@@ -6,6 +6,8 @@ from .. import fileManagement as fm
 
 rootPath = config.mainPath()
 dataPath = config.dataPath()
+weeks_dataPath = config.weeksPath()
+weeksGames_dataPath = config.weekGamesPath()
 thisPath = os.path.dirname(__file__)
 
 def main():

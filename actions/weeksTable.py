@@ -7,6 +7,7 @@ from .. import weeksActions as wa
 
 rootPath = config.mainPath()
 dataPath = config.dataPath()
+weeks_dataPath = config.weeksPath()
 thisPath = os.path.dirname(__file__)
 
 def main():
