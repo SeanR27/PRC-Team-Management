@@ -6,15 +6,14 @@ from .. import fileManagement as fm
 
 rootPath = config.mainPath()
 dataPath = config.dataPath()
-weeks_dataPath = config.weeksPath()
-weeksGames_dataPath = config.weekGamesPath()
 thisPath = os.path.dirname(__file__)
 
 def main():
-    createWeek("W0003")
-    df = getWeekGame_df("W0003")
-    addGame(df, 2, "P0005", "P0008")
-    exportWeekGame(df, "W0003")
+    weekID = "W0003"
+    createWeek(weekID)
+    df = fm.getDF_pkl(config.weekGamesPath(3, weekID))
+    addGame(df, 4, "P0005", "P0008")
+    fm.export(df, config.weekGamesPath(2, weekID), config.weekGamesPath(3, weekID))
 
 
 def getColumnDict():
@@ -29,14 +28,6 @@ def getColumnDict():
             "result": [4, "RESULT"]
             }
 
-def getSpecificGameDataPath(weekID): return weeksGames_dataPath + weekID + "/"
-
-def getWeekGame_df(weekID):
-    return fm.getDF_pkl(getSpecificGameDataPath(weekID) + weekID + ".pkl")
-
-def exportWeekGame(df, weekID):
-    fm.export(df, getSpecificGameDataPath(weekID) + weekID + ".csv", getSpecificGameDataPath(weekID) + weekID + ".pkl")
-
 def createWeek(weekID):
     colDict = getColumnDict()
     df = pd.DataFrame(columns = [colDict["courtNum"][1],
@@ -47,11 +38,9 @@ def createWeek(weekID):
     
     for i in range(4):
         df.loc[len(df), colDict["courtNum"][1]] = i + 1
-
-    pathBase = getSpecificGameDataPath(weekID)
     
-    os.makedirs(pathBase, exist_ok = True)
-    fm.export(df, pathBase + weekID + ".csv", pathBase + weekID + ".pkl")
+    os.makedirs(config.weekGamesPath(1, weekID), exist_ok = True)
+    fm.export(df, config.weekGamesPath(2, weekID), config.weekGamesPath(3, weekID))
 
 def addGame(df, courtNum, p1_id, p2_id):
     colDict = getColumnDict()

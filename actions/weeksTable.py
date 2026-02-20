@@ -8,17 +8,13 @@ import weeklyStats as ws
 
 rootPath = config.mainPath()
 dataPath = config.dataPath()
-weeks_dataPath = config.weeksPath()
 thisPath = os.path.dirname(__file__)
 
 def main():
-    weeksCSV_path = dataPath + "weeks.csv"
-    weeksPKL_path = dataPath + "weeks.pkl"
-
-    df = fm.getDF_pkl(weeksPKL_path)
+    df = fm.getDF_pkl(config.mainDataPath(2, 1))
     df = clearTable(df)
     
-    fm.export(df, weeksCSV_path, weeksPKL_path)
+    fm.export(df, config.mainDataPath(1, 1), config.mainDataPath(2, 1))
 
 
 def getColumnDict():

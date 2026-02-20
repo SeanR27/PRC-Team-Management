@@ -6,20 +6,16 @@ from .. import fileManagement as fm
 
 rootPath = config.mainPath()
 dataPath = config.dataPath()
-players_dataPath = config.playerPath()
 thisPath = os.path.dirname(__file__)
 
 def main():
-    playerCSV_path = players_dataPath + "players.csv"
-    playerPKL_path = players_dataPath + "players.pkl"
-
-    df = fm.getDF_pkl(playerPKL_path)
+    df = fm.getDF_pkl(config.principalDataPath(2, 0))
     df = clearTable(df)
     df = addPlayer(df, "Agota", "Roth")
     print(df)
     df = removePlayer(df, "P0000")
     print(df)
-    #fm.export(df, playerCSV_path, playerPKL_path)
+    #fm.export(df, config.mainDataPath(1, 0), config.mainDataPath(2, 0))
 
 
 def getColumnDict():

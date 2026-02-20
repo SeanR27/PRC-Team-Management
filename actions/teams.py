@@ -6,16 +6,12 @@ from .. import fileManagement as fm
 
 rootPath = config.mainPath()
 dataPath = config.dataPath()
-teams_dataPath = config.teamsPath()
 thisPath = os.path.dirname(__file__)
 
 def main():
-    teamsCSV_path = teams_dataPath + "teams.csv"
-    teamsPKL_path = teams_dataPath + "teams.pkl"
-
-    df = fm.getDF_pkl(teamsPKL_path)
+    df = fm.getDF_pkl(config.mainDataPath(2, 2))
     print(df)
-    #fm.export(df, playerCSV_path, playerPKL_path)
+    #fm.export(df, config.mainDataPath(1, 2), config.mainDataPath(2, 2))
 
 def getColumnDict():
     # KeyName : [index, columnLabel]
