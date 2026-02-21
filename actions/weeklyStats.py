@@ -1,12 +1,10 @@
 import pandas as pd
 import os
 
-from .. import config
 from .. import fileManagement as fm
+from .. import columns as cols
 
-rootPath = config.mainPath()
-dataPath = config.dataPath()
-thisPath = os.path.dirname(__file__)
+import players
 
 def main():
     weekID = "W0004"
@@ -14,22 +12,8 @@ def main():
 
 def getWeekStatsID(weekID): return "WPS_" + weekID
 
-def getColumnDict():
-    """
-    The Column Label-Index dictionary for a week table.
-    These tables hold information about each game for some week.
-    """
-    return {"playerID": [0, "PLAYER_ID"],
-            "court_ass": [1, "COURT_ASSIGNED"],
-            "court_played": [2, "COURT_PLAYED"],
-            "result": [3, "RESULT"],
-            "ws_before": [4, "WS_BEFORE"],
-            "ws_after": [4, "WS_AFTER"],
-            "weekAvab": [4, "AVAB"]
-            }
-
 def createWeek(weekID):
-    colDict = getColumnDict()
+    colDict = cols.weeklyStats()
     df = pd.DataFrame(columns = [colDict["playerID"][1],
                                     colDict["court_ass"][1],
                                     colDict["court_played"][1],
@@ -38,13 +22,21 @@ def createWeek(weekID):
                                     colDict["ws_after"][1],
                                     colDict["weekAvab"][1]])
        
-    os.makedirs(config.weekStatsPath(1, weekID), exist_ok = True)
-    fm.export(df, config.weekStatsPath(2, weekID), config.weekStatsPath(3, weekID))
+    os.makedirs(fm.weekStatsPath(1, weekID), exist_ok = True)
+    fm.export(df, fm.weekStatsPath(2, weekID), fm.weekStatsPath(3, weekID))
 
 def createBaseWeek():
-    colDict = getColumnDict()
+    colDict = cols.weeklyStats()
+    playerColDict = cols.players()
     createWeek("W0000")
-    playersDf = fm.getDF_pkl(config.mainDataPath(2, 0))
+    playersDF = fm.getDF_pkl(fm.mainDataPath(2, 0))
+
+    nPlayers = len(playersDF)
+
+    initCourt = [[None for _ in range(2)] for _ in range(nPlayers)]
+
+    for i in range(nPlayers):
+        initCourt = None
 
 
 main()

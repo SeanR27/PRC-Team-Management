@@ -1,40 +1,23 @@
 import pandas as pd
 import os
 
-from .. import config
 from .. import fileManagement as fm
+from .. import columns as cols
 import weeklyGames as wg
 import weeklyStats as ws
 
-rootPath = config.mainPath()
-dataPath = config.dataPath()
-thisPath = os.path.dirname(__file__)
-
 def main():
-    df = fm.getDF_pkl(config.mainDataPath(2, 1))
+    df = fm.getDF_pkl(fm.mainDataPath(2, 1))
     df = clearTable(df)
     
-    fm.export(df, config.mainDataPath(1, 1), config.mainDataPath(2, 1))
-
-
-def getColumnDict():
-    """
-    The Column Lable-Index dictionary for the weeks.csv table.
-    This table holds each week ID.
-    """
-    # KeyName : [index, columnLabel]
-    return {"weekID": [0, "WEEK_ID"],
-            "OppID": [1, "OPP_TEAM_ID"],
-            "homeAway": [2, "H_A"],
-            "date": [3, "DATE"]
-            }
+    fm.export(df, fm.mainDataPath(1, 1), fm.mainDataPath(2, 1))
 
 def clearTable(df):
 
     return df.drop(df.index, inplace = False)
 
 def addWeek(df, teamID, ha_bin, date):
-    colDict_weeks = getColumnDict()
+    colDict_weeks = cols.weeks()
 
     maxID = 0
     if not df.empty:
@@ -59,7 +42,7 @@ def removeWeek(df, weekID):
     nrows = len(df)
 
     for i in range(nrows):
-        if df.iloc[i, getColumnDict()["weekID"][0]] == weekID:
+        if df.iloc[i, cols.weeks()["weekID"][0]] == weekID:
             df.drop(df.iloc[i].name, inplace = True)
     
     return df

@@ -1,35 +1,18 @@
 import pandas as pd
 import os
 
-from .. import config
 from .. import fileManagement as fm
-
-rootPath = config.mainPath()
-dataPath = config.dataPath()
-thisPath = os.path.dirname(__file__)
+from ..  import columns as cols
 
 def main():
     weekID = "W0003"
     createWeek(weekID)
-    df = fm.getDF_pkl(config.weekGamesPath(3, weekID))
+    df = fm.getDF_pkl(fm.weekGamesPath(3, weekID))
     addGame(df, 4, "P0005", "P0008")
-    fm.export(df, config.weekGamesPath(2, weekID), config.weekGamesPath(3, weekID))
-
-
-def getColumnDict():
-    """
-    The Column Lable-Index dictionary for a week table.
-    These tables hold information about each game for some week.
-    """
-    return {"courtNum": [0, "COURT"],
-            "player1": [1, "P1"],
-            "player2": [2, "P2"],
-            "pairStrength": [3, "PAIR_STRNGTH"],
-            "result": [4, "RESULT"]
-            }
+    fm.export(df, fm.weekGamesPath(2, weekID), fm.weekGamesPath(3, weekID))
 
 def createWeek(weekID):
-    colDict = getColumnDict()
+    colDict = cols.weeklyGames()
     df = pd.DataFrame(columns = [colDict["courtNum"][1],
                                     colDict["player1"][1],
                                     colDict["player2"][1],
@@ -39,11 +22,11 @@ def createWeek(weekID):
     for i in range(4):
         df.loc[len(df), colDict["courtNum"][1]] = i + 1
     
-    os.makedirs(config.weekGamesPath(1, weekID), exist_ok = True)
-    fm.export(df, config.weekGamesPath(2, weekID), config.weekGamesPath(3, weekID))
+    os.makedirs(fm.weekGamesPath(1, weekID), exist_ok = True)
+    fm.export(df, fm.weekGamesPath(2, weekID), fm.weekGamesPath(3, weekID))
 
 def addGame(df, courtNum, p1_id, p2_id):
-    colDict = getColumnDict()
+    colDict = cols.weeklyGames()
     nrows = len(df)
 
     for i in range(nrows):
