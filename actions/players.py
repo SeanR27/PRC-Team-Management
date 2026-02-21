@@ -10,6 +10,21 @@ def main():
     df = addPlayer(df, "Agota", "Roth")
     fm.export(df, fm.mainDataPath(1, 0), fm.mainDataPath(2, 0))
 
+def createTable():
+    colDict = cols.players()
+    df = pd.DataFrame(columns = [colDict["playerID"][1],
+                                    colDict["firstName"][1],
+                                    colDict["lastName"][1],
+                                    colDict["totalGames"][1],
+                                    colDict["positionGames"][1],
+                                    colDict["wins"][1],
+                                    colDict["losses"][1],
+                                    colDict["ties"][1],
+                                    colDict["performance"][1],
+                                    colDict["weightedScore"][1]
+                                    ])
+    return df
+
 def clearTable(df): return df.drop(df.index, inplace = False)
 
 def addPlayer(df, first, last):
@@ -39,6 +54,7 @@ def removePlayer(df, playerID):
     
     return df
 
-
+def fillInitial():
+    None
 
 main()

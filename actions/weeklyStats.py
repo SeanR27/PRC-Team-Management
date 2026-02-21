@@ -26,8 +26,8 @@ def createWeek(weekID):
     fm.export(df, fm.weekStatsPath(2, weekID), fm.weekStatsPath(3, weekID))
 
 def createBaseWeek():
-    colDict = cols.weeklyStats()
-    playerColDict = cols.players()
+    clmns = cols.weeklyStats()
+    p_clmns = cols.players()
     createWeek("W0000")
     playersDF = fm.getDF_pkl(fm.mainDataPath(2, 0))
 
@@ -36,7 +36,8 @@ def createBaseWeek():
     initCourt = [[None for _ in range(2)] for _ in range(nPlayers)]
 
     for i in range(nPlayers):
-        initCourt = None
+        initCourt[i][0] = playersDF.iloc[i, p_clmns["playerID"][0]]
+        initCourt[i][1] = playersDF.iloc[i, p_clmns["playerID"][0]]
 
 
 main()

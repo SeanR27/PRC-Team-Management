@@ -26,12 +26,14 @@ def mainDataPath(mode, type):
         0 : players
         1 : weeks
         2 : teams
+        3 : initial data
     
     """
     typeStr = ""
     if type == 0: typeStr = "players"
     elif type == 1: typeStr = "weeks"
     elif type == 2: typeStr = "teams"
+    elif type == 3: typeStr = "initial_data"
     
     if mode == 0: return dataPath() + typeStr + "/"
     elif mode == 1: return mainDataPath(0, type) + typeStr + ".csv"
