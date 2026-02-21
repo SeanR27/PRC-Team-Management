@@ -4,13 +4,14 @@ def players():
     return {"playerID": [0, "PLAYER_ID"],
             "firstName": [1, "FIRST"],
             "lastName": [2, "LAST"],
-            "totalGames": [3, "TOT_GAMES"],
-            "positionGames": [4, "POS_GAMES"],
-            "wins": [5, "WIN"],
-            "losses": [6, "LOSS"],
-            "ties": [7, "TIE"],
-            "performance": [8, "PERF"],
-            "weightedScore": [9, "WS"]
+            "court_ass": [3, "COURT"],
+            "totalGames": [4, "TOT_GAMES"],
+            "positionGames": [5, "POS_GAMES"],
+            "wins": [6, "WIN"],
+            "losses": [7, "LOSS"],
+            "ties": [8, "TIE"],
+            "performance": [9, "PERF"],
+            "weightedScore": [10, "WS"]
             }
 
 def weeks():
@@ -34,11 +35,12 @@ def weeklyGames():
     The Label-Index dictionary for a week's game table columns.
     These tables hold games information for some week.
     """
-    return {"courtNum": [0, "COURT"],
-            "player1": [1, "P1"],
-            "player2": [2, "P2"],
-            "pairStrength": [3, "PAIR_STRNGTH"],
-            "result": [4, "RESULT"]
+    return {"weekID": [0, "WEEK_ID"],
+            "courtNum": [1, "COURT"],
+            "player1": [2, "P1"],
+            "player2": [3, "P2"],
+            "pairStrength": [4, "PAIR_STRNGTH"],
+            "result": [5, "RESULT"]
             }
 
 def weeklyStats():
@@ -46,13 +48,14 @@ def weeklyStats():
     The Label-Index dictionary for a weekly stats table columns.
     These tables hold player information for some week.
     """
-    return {"playerID": [0, "PLAYER_ID"],
-            "court_ass": [1, "COURT_ASSIGNED"],
-            "court_played": [2, "COURT_PLAYED"],
-            "result": [3, "RESULT"],
-            "ws_before": [4, "WS_BEFORE"],
-            "ws_after": [5, "WS_AFTER"],
-            "weekAvab": [6, "AVAB"]
+    return {"weekID": [0, "WEEK_ID"],
+            "playerID": [1, "PLAYER_ID"],
+            "court_ass": [2, "COURT_ASSIGNED"],
+            "court_played": [3, "COURT_PLAYED"],
+            "result": [4, "RESULT"],
+            "ws_before": [5, "WS_BEFORE"],
+            "ws_after": [6, "WS_AFTER"],
+            "weekAvab": [7, "AVAB"]
             }
 
 def initialData():
@@ -61,5 +64,5 @@ def initialData():
     """
     return {"firstName": [0, "FIRST"],
             "lastName": [1, "LAST"],
-            "court": [2, "COURT_ASS"]
+            "court_ass": [2, "COURT_ASS"]
             }

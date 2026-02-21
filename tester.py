@@ -9,4 +9,4 @@ df.loc[len(df)] = [4, "Isabelle"]
 df.loc[len(df)] = [5, "Luis"]
 df.loc[len(df)] = [6, "Coquito"]
 
-print(df.iloc[:,1])
+print(df["Number"].values.__class__)

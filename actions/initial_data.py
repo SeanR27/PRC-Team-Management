@@ -5,8 +5,7 @@ from .. import fileManagement as fm
 from .. import columns as cols
 
 def main():
-    df = createTable()
-    fm.export(df, fm.mainDataPath(1,3), fm.mainDataPath(2,3))
+    fm.make_pkl(fm.mainDataPath(1, 3), fm.mainDataPath(2, 3))
 
 def createTable():
     colDict = cols.initialData()

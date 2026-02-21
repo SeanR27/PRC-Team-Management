@@ -12,9 +12,16 @@ def main():
     
     fm.export(df, fm.mainDataPath(1, 1), fm.mainDataPath(2, 1))
 
-def clearTable(df):
+def createTable():
+    colDict = cols.weeks()
+    df = pd.DataFrame(columns = [colDict["weekID"][1],
+                                    colDict["OppID"][1],
+                                    colDict["homeAway"][1],
+                                    colDict["date"][1],
+                                    colDict["positionGames"][1]])
+    return df
 
-    return df.drop(df.index, inplace = False)
+def clearTable(df): return df.drop(df.index, inplace = False)
 
 def addWeek(df, teamID, ha_bin, date):
     colDict_weeks = cols.weeks()
