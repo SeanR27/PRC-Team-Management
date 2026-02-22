@@ -54,7 +54,43 @@ def removeWeek(df, weekID):
     
     return df
 
-def getWeek():
-    None
+def getWeeksSeries(df, weekID):
+    """
+    Gets the set of weeks up to a given week, inclusive.
+    Returns as a Series
+    """
+    weeksSeries = pd.Series()
+
+    for i in range(len(df)):
+        if df.iloc[i, cols.weeks()["weekID"][0]] == weekID:
+            targetDate = df.iloc[i, cols.weeks()["date"][0]]
+
+    for i in range(len(df)):
+        if df.iloc[i, cols.weeks()["date"][0]] <= targetDate:
+            weeksSeries.loc[len(weeksSeries)] = df.iloc[i, cols.weeks()["weekID"][0]]
+
+    return weeksSeries
+
+def getPreviousWeek(df, weekID):
+    """
+    Returns the Week ID of the previous week from a given week.
+    """
+    weeksSeries = getWeeksSeries(df, weekID)
+    nWeeks = len(weeksSeries)
+
+    if nWeeks == 0:
+        print("Week not found: " + weekID)
+        return None
+    
+    if nWeeks == 1:
+        print("No previous weeks: " + weekID)
+        return None
+    
+    weeksSeries.sort_values(ascending = True, inplace = True) 
+    return weeksSeries.iloc[nWeeks - 2]
+    
+    
+
+
 
 main()
