@@ -4,7 +4,7 @@ import os
 from .. import fileManagement as fm
 from .. import columns as cols
 
-import weeksTable as wt
+from . import weeksTable as wt
 
 def getWeightedScoreAvg(df, playerID, weekID):
     """

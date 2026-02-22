@@ -4,12 +4,10 @@ import os
 from .. import fileManagement as fm
 from .. import columns as cols
 
-import statsHelper as sh
-import weeksTable as wt
+from . import statsHelper as sh
+from . import weeksTable as wt
 
-def main():
-    weekID = "W0004"
-    createWeek(weekID)
+def main(): None
 
 def createWeek(weekID, weeksDF, playersDF):
     colDict = cols.weeklyStats()

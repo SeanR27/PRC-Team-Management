@@ -13,7 +13,7 @@ rootPath = os.path.dirname(__file__).replace('\\', '/') + "/"
 def mainPath(): return rootPath
 def dataPath(): return rootPath + "data/"
 
-def mainDataPath(mode, type):
+def mainDataPath(mode, dataName):
     """
     Returns the path for accessing principal data files.
 
@@ -21,23 +21,10 @@ def mainDataPath(mode, type):
         0 : path to directory
         1 : path to CSV file
         2 : path to PKL file
-
-    Type:
-        0 : players
-        1 : weeks
-        2 : teams
-        3 : initial data
-    
-    """
-    typeStr = ""
-    if type == 0: typeStr = "players"
-    elif type == 1: typeStr = "weeks"
-    elif type == 2: typeStr = "teams"
-    elif type == 3: typeStr = "initial_data"
-    
-    if mode == 0: return dataPath() + typeStr + "/"
-    elif mode == 1: return mainDataPath(0, type) + typeStr + ".csv"
-    elif mode == 2: return mainDataPath(0, type) + typeStr + ".pkl"
+    """    
+    if mode == 0: return dataPath() + dataName + "/"
+    elif mode == 1: return mainDataPath(0, dataName) + dataName + ".csv"
+    elif mode == 2: return mainDataPath(0, dataName) + dataName + ".pkl"
     return None
 
 def weekGamesPath(mode, weekID):

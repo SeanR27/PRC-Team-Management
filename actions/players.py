@@ -5,9 +5,7 @@ from .. import fileManagement as fm
 from .. import columns as cols
 
 def main():
-    df = createTable()
-    df = fillInitial(df)
-    fm.export(df, fm.mainDataPath(1, 0), fm.mainDataPath(2, 0))
+    None
 
 def createTable():
     colDict = cols.players()
@@ -26,6 +24,8 @@ def createTable():
     return df
 
 def clearTable(df): return df.drop(df.index, inplace = False)
+
+def viewPlayers(df): print(df)
 
 def addPlayer(df, first, last, court):
 

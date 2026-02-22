@@ -3,14 +3,11 @@ import os
 
 from .. import fileManagement as fm
 from .. import columns as cols
-import weeklyGames as wg
-import weeklyStats as ws
+from . import weeklyGames as wg
+from . import weeklyStats as ws
 
 def main():
-    df = fm.getDF_pkl(fm.mainDataPath(2, 1))
-    df = clearTable(df)
-    
-    fm.export(df, fm.mainDataPath(1, 1), fm.mainDataPath(2, 1))
+    None
 
 def createTable():
     colDict = cols.weeks()

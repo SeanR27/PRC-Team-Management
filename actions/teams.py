@@ -5,9 +5,13 @@ from .. import fileManagement as fm
 from .. import columns as cols
 
 def main():
-    df = fm.getDF_pkl(fm.mainDataPath(2, 2))
-    print(df)
-    #fm.export(df, config.mainDataPath(1, 2), config.mainDataPath(2, 2))
+    None
+
+def createTable():
+    colDict = cols.teams()
+    df = pd.DataFrame(columns = [colDict["teamID"][1],
+                                    colDict["teamName"][1]
+                                    ])
 
 def clearTable(df): return df.drop(df.index, inplace = False)
 
