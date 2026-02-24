@@ -1,6 +1,8 @@
 import pandas as pd
 import os
 
+from .actions import globalData as gd
+
 # Import & Export Tools
 def getDF_pkl(path): return pd.read_pickle(path)
 def getDF_csv(path): return pd.read_csv(path)
@@ -21,10 +23,14 @@ def mainDataPath(mode, dataName):
         0 : path to directory
         1 : path to CSV file
         2 : path to PKL file
-    """    
-    if mode == 0: return dataPath() + dataName + "/"
-    elif mode == 1: return mainDataPath(0, dataName) + dataName + ".csv"
-    elif mode == 2: return mainDataPath(0, dataName) + dataName + ".pkl"
+    """
+    dataName_str = str(dataName)
+    if dataName_str not in gd.mainDataNames:
+        raise Exception("There is no main data file that should have root filename: " + dataName_str)
+        
+    if mode == 0: return dataPath() + dataName_str + "/"
+    elif mode == 1: return mainDataPath(0, dataName_str) + dataName_str + ".csv"
+    elif mode == 2: return mainDataPath(0, dataName_str) + dataName_str + ".pkl"
     return None
 
 def weekGamesPath(mode, weekID):

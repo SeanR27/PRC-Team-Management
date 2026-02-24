@@ -4,6 +4,8 @@ import os
 from .. import fileManagement as fm
 from .. import columns as cols
 
+from . import globalData as gd
+
 def main():
     None
 
@@ -23,11 +25,15 @@ def createTable():
                                     ])
     return df
 
-def clearTable(df): return df.drop(df.index, inplace = False)
+def clearTable(): gd.setMain(createTable(), "players")
 
-def viewPlayers(df): print(df)
+def viewPlayers(): print(gd.getMain("players"))
 
-def addPlayer(df, first, last, court):
+def addPlayer(first, last, court):
+    """
+    Adds a player to the player DataFrame.
+    """
+    df = gd.getMain("players")
 
     first = first.capitalize()
     last = last.capitalize()
@@ -44,22 +50,29 @@ def addPlayer(df, first, last, court):
     df.loc[rows, colDict["lastName"][1]] = last
     df.loc[rows, colDict["court_ass"][1]] = court
 
-    return df
+    gd.setMain(df, "players")
 
-def removePlayer(df, playerID):
+def removePlayer(playerID):
+    df = gd.getMain("players")
     nrows = len(df)
 
-    for i in range(nrows):
+    if playerID not in df[cols.players()["playerID"][1]].values: print("Player " + str(playerID) + " not found in player list.")
+
+    i = 0
+    while i < nrows:
         if df.iloc[i, cols.players()["playerID"][0]] == playerID:
             df.drop(df.iloc[i].name, inplace = True)
-    
-    return df
+            nrows -= 1
+            continue
+        i += 1
 
-def fillInitial(df):
+    gd.setMain(df, "players")
+
+def fillInitial():
     dfInit = fm.getDF_pkl(fm.mainDataPath(2, 3))
     nInit = len(dfInit)
 
-    df = clearTable(df)
+    df = createTable()
 
     for i in range(nInit):
         first = dfInit.iloc[i, cols.initialData()["firstName"][0]]
@@ -67,6 +80,6 @@ def fillInitial(df):
         court = dfInit.iloc[i, cols.initialData()["court_ass"][0]]
         df = addPlayer(df, first, last, court)
 
-    return df
+    gd.setMain(df, "players")
 
 main()

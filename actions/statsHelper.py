@@ -1,18 +1,18 @@
 import pandas as pd
 import os
 
-from .. import fileManagement as fm
 from .. import columns as cols
 
+from . import globalData as gd
 from . import weeksTable as wt
 
-def getWeightedScoreAvg(df, playerID, weekID):
+def getWeightedScoreAvg(playerID, weekID):
     """
     Gets the average weighted score for a some player up to a given week.
     Avg. Weighted Score = Sum of Weighted Scores / Number of Games Played
     """
-    wsSum = getWeightedScore(df, playerID, weekID)
-    nGames = getNumGames(df, playerID, weekID)
+    wsSum = getWeightedScore(playerID, weekID)
+    nGames = getNumGames(playerID, weekID)
 
     if (nGames == 0):
         print("Player " + playerID + " has no games.")
@@ -22,22 +22,19 @@ def getWeightedScoreAvg(df, playerID, weekID):
 
    
 
-def getWeightedScore(df, playerID, weekID):
+def getWeightedScore(playerID, weekID):
     """
     Gets the summed weighted score for a player up to (and including) a specified week.
     """
     wsSum = 0
-    wSeries = wt.getWeeksSeries(df, weekID)
+    wSeries = wt.getWeeksSeries(weekID)
 
     for i in range(len(wSeries)):
         weekID_loop = wSeries.iloc[i]
         court = None
         res = None
 
-        try:
-            weekGame = fm.getDF_pkl(fm.weekGamesPath(3, weekID_loop))
-        except:
-            print("There probably isn't a Week Game Table for the week " + weekID_loop)
+        weekGame = gd.getWeeklyGames(weekID_loop)
         
         for j in range(len(weekGame)):
             p1 = weekGame.iloc[j, cols.weeklyGames()["player1"][0]]
@@ -63,24 +60,21 @@ def calcWeightedScore(court, res):
 
     return (court + added)
 
-def getNumGames(df, playerID, weekID):
+def getNumGames(playerID, weekID):
     """
     Gets the number of games a player has played up to (and including) the given week.
     """
     nGames = 0
-    wSeries = wt.getWeeksSeries(df, weekID)
+    wSeries = wt.getWeeksSeries(weekID)
 
     for i in range(len(wSeries)):
         weekID_loop = wSeries.iloc[i]
 
-        try:
-            weekGame = fm.getDF_pkl(fm.weekGamesPath(3, weekID_loop))
-        except:
-            print("There probably isn't a Week Game Table for the week " + weekID_loop)
+        weekGame = gd.getWeeklyGames(weekID)
         
         for j in range(len(weekGame)):
             p1 = weekGame.iloc[j, cols.weeklyGames()["player1"][0]]
-            p2 = weekGame.iloc[j, cols.weeklyGames()["player1"][0]]
+            p2 = weekGame.iloc[j, cols.weeklyGames()["player2"][0]]
             if (p1 == playerID) or (p2 == playerID):
                 nGames += 1
                 

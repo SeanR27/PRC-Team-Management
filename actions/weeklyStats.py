@@ -1,15 +1,13 @@
 import pandas as pd
 import os
 
-from .. import fileManagement as fm
 from .. import columns as cols
 
+from . import globalData as gd
 from . import statsHelper as sh
 from . import weeksTable as wt
 
-def main(): None
-
-def createWeek(weekID, weeksDF, playersDF):
+def createWeek(weekID):
     colDict = cols.weeklyStats()
     df = pd.DataFrame(columns = [colDict["weekID"][1],
                                     colDict["playerID"][1],
@@ -20,30 +18,21 @@ def createWeek(weekID, weeksDF, playersDF):
                                     colDict["ws_after"][1],
                                     colDict["weekAvab"][1]])
 
+    weeksDF = gd.getMain("weeks")
     weekCols = cols.weeks()
-
     existingWeeks = weeksDF[weekCols["weekID"][1]]
-
     if not (weekID in existingWeeks.values):
         raise Exception("This week is not in weeks.csv.\nWeek ID: " + weekID)
     
-    df = fillWeekStats(df, weekID, playersDF)
+    gd.setWeeklyStats(df, weekID)
 
-    os.makedirs(fm.weekStatsPath(1, weekID), exist_ok = True)
-    fm.export(df, fm.weekStatsPath(2, weekID), fm.weekStatsPath(3, weekID))
-
-    return df
-
-def fillWeekStats(df, weekID, playersDF):
+def fillWeekStats(weekID):
     """
-    Fills the weekly stats table for a given week.
-
-    df:
-        The empyt weekly stats table for the given week.
-    
+    Fills the weekly stats table for a given week.    
     """
 
-    if (not df.empty): raise Exception("Cannot fill this Week Stats file; file must be empty to fill.")
+    df = gd.getWeeklyStats(weekID)
+    playersDF = gd.getMain("players")
 
     # Basic Fill (playerID, weekID, assigned courts)
     colDict = cols.weeklyStats()
@@ -54,26 +43,18 @@ def fillWeekStats(df, weekID, playersDF):
         df.loc[i, colDict["weekID"][1]] = weekID
         df.loc[i, colDict["court_ass"][1]] = playersDF.iloc[i, playersCols["court_ass"][0]]
 
-    try:
-        gameDF = fm.getDF_pkl(fm.weekGamesPath(3, weekID))
-    except:
-        raise Exception("Game Week File Not Found.\nWeek ID: " + weekID)
+    gd.setWeeklyStats(df, weekID)
 
-    df = fillWeekGameData(df, weekID, gameDF)
-    df = fillWeightedScore(df, weekID, gameDF)
+    # Other Fill
+    fillWeekGameData(weekID)
+    fillWeightedScore(weekID)
 
-    return df
-
-def fillWeekGameData(df, weekID, gameDF):
+def fillWeekGameData(weekID):
     """
     Fills data in Weekly Stats Table which must be filled from week's game data.
     """
-    if (not os.path.isdir(fm.weekGamesPath(1, weekID))):
-        raise Exception(weekID + " game table direcotry does not exist.\nAttempted path: " + fm.weekGamesPath(1, weekID))
-    
-    if (not os.path.isfile(fm.weekGamesPath(3, weekID))):
-        raise Exception(weekID + " game table file does not exist.\nAttempted path: " + fm.weekGamesPath(3, weekID))
-    
+    df = gd.getWeeklyStats(weekID)
+    gameDF = gd.getWeeklyGames(weekID)
     colDict = cols.weeklyStats()
     colDict_game = cols.weeklyGames()
 
@@ -88,19 +69,21 @@ def fillWeekGameData(df, weekID, gameDF):
             if (loopPlayerID == p1_ID) or (loopPlayerID == p2_ID):
                 df.iloc[j, colDict["court_played"][0]] = court
                 df.iloc[j, colDict["result"][0]] = result
-        
-    return df
 
-def fillWeightedScore(df, weekID, gameDF):
+    gd.setWeeklyStats(weekID)
+
+def fillWeightedScore(weekID):
     """
     Fills the weighted score for all playerIDs in the given Weekly Stats Table.
     """
+    df = gd.getWeeklyStats(weekID)
+    gameDF = gd.getWeeklyGames(weekID)
 
     arr_p1 = gameDF[cols.weeklyGames()["player1"][1]].values
     arr_p2 = gameDF[cols.weeklyGames()["player2"][1]].values
 
     prevWeekID = wt.getPreviousWeek(weekID)
-    prevWeek_statsDF = fm.getDF_pkl(fm.weekStatsPath(3, prevWeekID))
+    prevWeek_statsDF = gd.getWeeklyStats(prevWeekID)
 
     if (prevWeekID != None):
         prevWeek_playerList = prevWeek_statsDF[cols.weeklyStats["playerID"][1]].values
@@ -110,7 +93,7 @@ def fillWeightedScore(df, weekID, gameDF):
         prevWeekStats_playerRow = prevWeek_statsDF[prevWeek_statsDF[cols.weeklyStats["playerID"][1]] == playerID]
 
         if (playerID in arr_p1) or (playerID in arr_p2):
-            df.iloc[i, cols.weeklyStats()["ws_after"][0]] = sh.getWeightedScoreAvg(df, playerID, weekID)
+            df.iloc[i, cols.weeklyStats()["ws_after"][0]] = sh.getWeightedScoreAvg(playerID, weekID)
         else:
             if (prevWeekID == None) or (playerID not in prevWeek_playerList):
                 df.iloc[i, cols.weeklyStats()["ws_after"][0]] = 0
@@ -121,6 +104,5 @@ def fillWeightedScore(df, weekID, gameDF):
             df.iloc[i, cols.weeklyStats()["ws_before"][0]] = prevWeekStats_playerRow.loc[cols.weeklyStats()["ws_after"][1]]
         else:
             df.iloc[i, cols.weeklyStats()["ws_before"][0]] = 0
-
-
-main()
+    
+    gd.setWeeklyStats(df, weekID)

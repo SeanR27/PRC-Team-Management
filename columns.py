@@ -20,7 +20,7 @@ def weeks():
     This table holds each week ID.
     """
     return {"weekID": [0, "WEEK_ID"],
-            "OppID": [1, "OPP_TEAM_ID"],
+            "opp": [1, "OPPONENT"],
             "homeAway": [2, "H_A"],
             "date": [3, "DATE"]
             }
